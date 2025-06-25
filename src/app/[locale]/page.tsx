@@ -69,13 +69,13 @@ export default async function Page(props: {
             >
               {profil.email[0]}
             </a>
-            <a
-              href={`tel:${profil.phone[0]}`}
-              className="block underline hover:text-blue-600"
-              property="telephone"
-            >
-              {profil.phone[0]}
-            </a>
+           <a
+  href={`tel:${profil.phone[0].replace(/\s+/g, '')}`}  // ← retire les espaces pour href
+  className="block underline hover:text-blue-600"
+  property="telephone"
+>
+  {profil.phone[0]}  {/* ← conserve l'affichage lisible */}
+</a>
             <a
               href={profil.github[0]['@_url']}
               target="_blank"

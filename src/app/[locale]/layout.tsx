@@ -8,13 +8,17 @@ export default async function LocaleLayout(props: {
   const { locale } = await props.params;
 
   return (
-    <div lang={locale}>
+     <>
+      {/* en-tête avec sélecteur de langue */}
       <header className="p-4 border-b flex justify-end">
-        <LocaleSwitch locale={locale} />   {/* ← ici */}
+        <LocaleSwitch locale={locale} />
       </header>
 
-      <main className="container mx-auto p-6">{props.children}</main>
-    </div>
+      {/* le <main> reste uniquement dans la page (page.tsx) */}
+      <div lang={locale} className="container mx-auto p-6">
+        {props.children}
+      </div>
+    </>
   );
 }
 
