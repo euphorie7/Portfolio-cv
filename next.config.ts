@@ -1,9 +1,9 @@
-import type { NextConfig } from 'next';
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // ⬇️  coupe totalement ESLint lors du `next build`
   eslint: {
-    ignoreDuringBuilds: true,   // 👈 coupe ESLint en prod
+    ignoreDuringBuilds: true,
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
