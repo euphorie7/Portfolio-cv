@@ -91,7 +91,7 @@ export default async function Page(props: {
         <section>
           <h2 className="font-semibold">Intérêts</h2>
           <ul className="list-disc list-inside text-sm" property="knowsAbout">
-            {profil.interests[0].item.map((it: string, i) => (
+            {profil.interests[0].item.map((it: string, i: number) => (
               <li key={`${it}-${i}`}>{it}</li>
             ))}
           </ul>
@@ -114,7 +114,7 @@ export default async function Page(props: {
         <section>
           <h2 className="font-semibold">Compétences</h2>
           <ul className="text-sm space-y-2" property="hasSkill">
-            {skills.map((cat: any, i) => (
+            {skills.map((cat: any, i: number) => (
               <li
                 key={`${cat['@_name']}-${i}`}
                 className="bg-white hover:bg-gray-50 transition p-3 rounded-lg shadow-sm"
@@ -180,7 +180,7 @@ export default async function Page(props: {
           <Carousel className="relative">
             <CarouselPrevious />
             <CarouselContent className="m-3">
-              {projects.map((proj: any, i) => (
+              {projects.map((proj: any, i: number) => (
                 <CarouselItem
                   key={`${proj['@_code']}-${i}`}
                   className="p-2"
