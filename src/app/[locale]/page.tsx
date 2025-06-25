@@ -76,15 +76,23 @@ export default async function Page(props: {
 >
   {profil.phone[0]}  {/* ← conserve l'affichage lisible */}
 </a>
-            <a
-              href={profil.github[0]['@_url']}
-              target="_blank"
-              className="block underline hover:text-blue-600"
-              property="sameAs"
-            >
-              {profil.github[0]['#text']}
-            </a>
-          </div>
+            <a 
+		href={profil.linkedin[0].$.url}
+		target="_blank"
+		rel="noopener noreferrer" 
+		className="underline text-blue-600"
+              >
+  LinkedIn
+	   </a>
+	   <a 
+		href={profil.github[0].$.url} 
+		target="_blank"
+		rel="noopener noreferrer" 
+		className="underline text-blue-600"
+	    >
+	  GitHub
+	  </a>
+		  </div>
         </div>
 
         {/* Intérêts */}
