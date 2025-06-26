@@ -217,12 +217,12 @@ export default async function Page(props: {
         {videoUrl && (
           <section resource="#video1" typeof="VideoObject" property="hasPart">
             <h2 className="text-2xl font-semibold mb-3" property="name">
-              {video?.title?.[0] ?? 'Présentation vidéo'}
+              {video?.title?.[0] ?? 'Epilogue lala land'}
             </h2>
 
             <div className="aspect-video w-full max-w-3xl mx-auto">
               <iframe
-                src={videoUrl}
+                src="https://www.youtube.com/watch?v=HSg3tBzAVFk&list=RDHSg3tBzAVFk&start_radio=1"
                 title="Présentation vidéo"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
