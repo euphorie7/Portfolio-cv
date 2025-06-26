@@ -14,7 +14,7 @@ export default async function Page(props: {
   params: Promise<{ locale: string }>;
 }) {
  
-  const { locale } = props.params;
+  const { locale } = await props.params;
   const p          = await getContent(locale);
 
   const profile   = p.profile[0];
