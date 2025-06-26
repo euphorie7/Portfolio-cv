@@ -220,7 +220,7 @@ export default async function Page(props: {
               {video?.title?.[0] ?? 'Epilogue lala land'}
             </h2>
 
-            <div className=" h-50 w-full max-w-3xl mx-auto">
+            <div className=" h-120 w-full max-w-3xl mx-auto">
               <iframe
   src={videoUrl}
   title="Vidéo"
