@@ -29,31 +29,32 @@ export default async function Page(props: {
   return (
     <div
       className="flex flex-col lg:flex-row gap-0"
-      vocab="http://schema.org/"
+      vocab="https://schema.org/"
       typeof="Person"
     >
       {/* ---------------- Sidebar ---------------- */}
-      {/* ---------------- Sticky Sidebar ---------------- */}
-      <aside className="fixed left-0 top-0 h-screen w-80 bg-gradient-to-b from-gray-100 to-gray-200 px-6 py-8 shadow-lg overflow-y-auto space-y-6 z-20">
+      <aside
+        resource="#sidebar"
+        typeof="WPAside"
+        className="fixed left-0 top-0 h-screen w-80 bg-gradient-to-b from-gray-100 to-gray-200 px-6 py-8 shadow-lg overflow-y-auto space-y-6 z-20"
+      >
         {/* Photo */}
-
-<div className="flex justify-center mb-4">
-  <div className="relative w-40 h-40 overflow-hidden rounded-full ring-4 ring-gray-300 hover:scale-105 transition">
-    {profil.photo?.[0]?.$?.src && (
-      <Image
-        src={profil.photo[0].$.src}          // → "/hamza.jpg"
-        alt={profil.photo[0].$.alt || 'photo'}
-        fill                                  // Image occupe tout le conteneur
-        className="object-cover"              // remplissage sans déformation
-        property="image"
-      />
-    )}
-  </div>
-</div>
-
+        <div className="flex justify-center mb-4" property="image" typeof="ImageObject">
+          <div className="relative w-40 h-40 overflow-hidden rounded-full ring-4 ring-gray-300 hover:scale-105 transition">
+            {profil.photo?.[0]?.$?.src && (
+              <Image
+                src={profil.photo[0].$.src}
+                alt={profil.photo[0].$.alt || 'photo'}
+                fill
+                className="object-cover"
+                property="contentUrl"
+              />
+            )}
+          </div>
+        </div>
 
         {/* Infos principales */}
-        <div className="text-center space-y-1">
+        <div className="text-center space-y-1" typeof="ContactPoint" property="contactPoint">
           <h1 className="text-2xl font-bold" property="name">
             {profil.name[0]}
           </h1>
@@ -69,68 +70,74 @@ export default async function Page(props: {
             >
               {profil.email[0]}
             </a>
-           <a
-  href={`tel:${profil.phone[0].replace(/\s+/g, '')}`}  // ← retire les espaces pour href
-  className="block underline hover:text-blue-600"
-  property="telephone"
->
-  {profil.phone[0]}  {/* ← conserve l'affichage lisible */}
-</a>
-            <a 
-		href={profil.linkedin[0].$.url}
-		target="_blank"
-		rel="noopener noreferrer" 
-		className="underline text-blue-600"
-              >
-  LinkedIn
-	   </a>
-	   <a 
-		href={profil.github[0].$.url} 
-		target="_blank"
-		rel="noopener noreferrer" 
-		className="underline text-blue-600"
-	    >
-	  GitHub
-	  </a>
-		  </div>
+            <a
+              href={`tel:${profil.phone[0].replace(/\s+/g, '')}`}
+              className="block underline hover:text-blue-600"
+              property="telephone"
+            >
+              {profil.phone[0]}
+            </a>
+            <a
+              href={profil.linkedin[0].$.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-gray-600 underline mb-2"
+              property="sameAs"
+            >
+              LinkedIn
+            </a>
+            <a
+              href={profil.github[0].$.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-gray-600 underline"
+              property="sameAs"
+            >
+              GitHub
+            </a>
+          </div>
         </div>
 
         {/* Intérêts */}
-        <section>
+        <section typeof="ItemList" property="knowsAbout">
           <h2 className="font-semibold">Intérêts</h2>
-          <ul className="list-disc list-inside text-sm" property="knowsAbout">
+          <ul className="list-disc list-inside text-sm">
             {profil.interests[0].item.map((it: string, i: number) => (
-              <li key={`${it}-${i}`}>{it}</li>
+              <li key={`${it}-${i}`} property="itemListElement">
+                {it}
+              </li>
             ))}
           </ul>
         </section>
 
         {/* Langues */}
-        <section>
+        <section typeof="ItemList" property="knowsLanguage">
           <h2 className="font-semibold">Langues</h2>
-<ul className="text-sm space-y-0.5" property="knowsLanguage">
-  {profil.languages[0].lang.map((l: any, i: number) => (
-    <li key={`${l.$.name}-${i}`} className="flex items-center gap-1">
-      <span className="font-medium">{l.$.name}</span>
-      <span className="text-xs text-gray-600">({l.$.level})</span>
-    </li>
-  ))}
-</ul>
+          <ul className="text-sm space-y-0.5">
+            {profil.languages[0].lang.map((l: any, i: number) => (
+              <li key={`${l.$.name}-${i}`} className="flex items-center gap-1" property="itemListElement">
+                <span className="font-medium" property="name">{l.$.name}</span>
+                <span className="text-xs text-gray-600">({l.$.level})</span>
+              </li>
+            ))}
+          </ul>
         </section>
 
         {/* Compétences */}
-        <section>
+        <section typeof="ItemList" property="hasSkill">
           <h2 className="font-semibold">Compétences</h2>
-          <ul className="text-sm space-y-2" property="hasSkill">
+          <ul className="text-sm space-y-2">
             {skills.map((cat: any, i: number) => (
               <li
                 key={`${cat['@_name']}-${i}`}
                 className="bg-white hover:bg-gray-50 transition p-3 rounded-lg shadow-sm"
+                property="itemListElement"
+                typeof="DefinedTerm"
               >
-                <span className="font-medium block text-gray-800">
+                <span className="font-medium block text-gray-800" property="name">
                   {cat['@_name']}
                 </span>
-                <span className="text-xs text-gray-600">
+                <span className="text-xs text-gray-600" property="description">
                   {cat.skill.join(', ')}
                 </span>
               </li>
@@ -139,11 +146,10 @@ export default async function Page(props: {
         </section>
       </aside>
 
-
       {/* ---------------- Main ---------------- */}
-      <main className="flex-1 ml-0 lg:ml-80 space-y-12 px-4 py-10 bg-gray-50">
+      <main className="flex-1 ml-0 lg:ml-80 space-y-12 px-4 py-10 bg-gray-50" resource="#main" typeof="WebPageElement">
         {/* À propos */}
-        <section>
+        <section typeof="AboutPage" property="about">
           <h2 className="text-2xl font-semibold mb-3">À propos</h2>
           <p property="description" className="leading-relaxed text-gray-800">
             {p.about[0]}
@@ -151,7 +157,7 @@ export default async function Page(props: {
         </section>
 
         {/* Formation – Carousel */}
-        <section>
+        <section resource="#education" typeof="ItemList" property="alumniOf">
           <h2 className="text-2xl font-semibold mb-3">Formation</h2>
           <p className="text-sm text-gray-500 mb-2">Glissez ou utilisez les flèches</p>
           <Carousel className="relative">
@@ -159,19 +165,13 @@ export default async function Page(props: {
             <CarouselContent className="m-3">
               {education.map((e: any, i: number) => (
                 <CarouselItem
-                  key={`${i}-edu`}
-                  className="p-2"
-                  typeof="EducationalOccupationalProgram"
-                >
+                  key={`${i}-edu`} className="p-2" typeof="EducationalOccupationalProgram" property="itemListElement">
                   <Card className="h-full bg-white/80 hover:bg-white transition">
                     <CardContent className="py-4 space-y-1">
                       <p className="font-medium" property="name">
-                        {e.label[0]}{' '}
-                        <span className="text-xs text-gray-500">({e.year[0]})</span>
+                        {e.label[0]} <span className="text-xs text-gray-500">({e.year[0]})</span>
                       </p>
-                      <p className="text-sm text-gray-600" property="provider">
-                        {e.place[0]}
-                      </p>
+                      <p className="text-sm text-gray-600" property="provider">{e.place[0]}</p>
                     </CardContent>
                   </Card>
                 </CarouselItem>
@@ -182,7 +182,7 @@ export default async function Page(props: {
         </section>
 
         {/* Projets – Carousel */}
-        <section>
+        <section resource="#projects" typeof="ItemList" property="hasPart">
           <h2 className="text-2xl font-semibold mb-3">Projets</h2>
           <p className="text-sm text-gray-500 mb-2">Glissez ou utilisez les flèches</p>
           <Carousel className="relative">
@@ -194,13 +194,14 @@ export default async function Page(props: {
                   className="p-2"
                   resource={`#${proj['@_code']}`}
                   typeof="CreativeWork"
+                  property="itemListElement"
                 >
                   <Card className="h-full bg-white/80 hover:bg-white transition">
                     <CardContent className="space-y-1 py-4">
                       <h3 property="name" className="font-medium">
                         {proj.name[0]}
                       </h3>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-500" property="dateCreated">
                         {proj.period[0]} · {proj.tools}
                       </p>
                       <p property="description" className="text-sm text-gray-700">
@@ -214,21 +215,25 @@ export default async function Page(props: {
             <CarouselNext />
           </Carousel>
         </section>
-        
+
+        {/* Vidéo */}
         {videoUrl && (
-  <section resource="#video1" typeof="VideoObject">
-    <h2 className="text-2xl font-semibold mb-3" property="name">{video?.title?.[0]}</h2>
-    <iframe
-  width="800"
-  height="450"
-  src="https://www.youtube.com/embed/aircAruvnKk"
-  title="YouTube video"
-  frameBorder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowFullScreen
-></iframe>
-  </section>
-)}
+          <section resource="#video1" typeof="VideoObject" property="hasPart">
+            <h2 className="text-2xl font-semibold mb-3" property="name">
+              {video?.title?.[0] || 'Présentation vidéo'}
+            </h2>
+            <div className="aspect-video w-full max-w-3xl mx-auto">
+              <iframe
+                src={videoUrl}
+                title="Présentation vidéo"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full rounded-lg shadow-lg"
+                property="embedUrl"
+              />
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );
