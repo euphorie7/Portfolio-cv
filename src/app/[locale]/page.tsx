@@ -54,20 +54,19 @@ export default async function Page(props: {
         </div>
 
         {/* Infos principales */}
-        <div className="text-center space-y-1" typeof="ContactPoint" property="contactPoint">
+        <div className="text-center space-y-1">
           <h1 className="text-2xl font-bold" property="name">
             {profil.name[0]}
           </h1>
           <p className="text-sm text-gray-700">
-            <span property="birthDate" typeof="Person">{profil.age[0]}</span> ans •{' '}
-            <span property="address" typeof="Person">{profil.location[0]}</span>
+            <span property="birthDate">{profil.age[0]}</span> ans •{' '}
+            <span property="address">{profil.location[0]}</span>
           </p>
-          <div className="space-y-0.5">
+          <div className="space-y-0.5" typeof="ContactPoint" property="contactPoint">
             <a
               href={`mailto:${profil.email[0]}`}
               className="block underline hover:text-blue-600"
               property="email"
-              
             >
               {profil.email[0]}
             </a>
@@ -83,7 +82,7 @@ export default async function Page(props: {
               target="_blank"
               rel="noopener noreferrer"
               className="block text-gray-600 underline mb-2"
-         	property="sameAs"
+              property="sameAs"
             >
               LinkedIn
             </a>
@@ -92,7 +91,7 @@ export default async function Page(props: {
               target="_blank"
               rel="noopener noreferrer"
               className="block text-gray-600 underline"
-           property="sameAs"
+              property="sameAs"
             >
               GitHub
             </a>
@@ -112,7 +111,7 @@ export default async function Page(props: {
         </section>
 
         {/* Langues */}
-        <section typeof="ItemList" property="knowsLanguage" typeof="Language">
+        <section typeof="ItemList" property="knowsLanguage">
           <h2 className="font-semibold">Langues</h2>
           <ul className="text-sm space-y-0.5">
             {profil.languages[0].lang.map((l: any, i: number) => (
