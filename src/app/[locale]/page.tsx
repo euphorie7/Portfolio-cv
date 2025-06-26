@@ -169,6 +169,94 @@ export default async function Page(props: {
       {/* ============ MAIN ============ */}
       {/* … (le reste de ton composant ne change pas) … */}
     </div>
+    <main className="flex-1 ml-0 lg:ml-80 space-y-12 px-4 py-10 bg-gray-50" resource="#main" typeof="WebPageElement">
+        {/* À propos */}
+        <section typeof="AboutPage" property="about">
+          <h2 className="text-2xl font-semibold mb-3">À propos</h2>
+          <p property="description" className="leading-relaxed text-gray-800">
+            {p.about[0]}
+          </p>
+        </section>
+
+        {/* Formation – Carousel */}
+        <section resource="#education" typeof="ItemList" property="alumniOf">
+          <h2 className="text-2xl font-semibold mb-3">Formation</h2>
+          <p className="text-sm text-gray-500 mb-2">Glissez ou utilisez les flèches</p>
+          <Carousel className="relative">
+            <CarouselPrevious />
+            <CarouselContent className="m-3">
+              {education.map((e: any, i: number) => (
+                <CarouselItem
+                  key={${i}-edu} className="p-2" typeof="EducationalOccupationalProgram" property="itemListElement">
+                  <Card className="h-full bg-white/80 hover:bg-white transition">
+                    <CardContent className="py-4 space-y-1">
+                      <p className="font-medium" property="name">
+                        {e.label[0]} <span className="text-xs text-gray-500">({e.year[0]})</span>
+                      </p>
+                      <p className="text-sm text-gray-600" property="provider">{e.place[0]}</p>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselNext />
+          </Carousel>
+        </section>
+
+        {/* Projets – Carousel */}
+        <section resource="#projects" typeof="ItemList" property="hasPart">
+          <h2 className="text-2xl font-semibold mb-3">Projets</h2>
+          <p className="text-sm text-gray-500 mb-2">Glissez ou utilisez les flèches</p>
+          <Carousel className="relative">
+            <CarouselPrevious />
+            <CarouselContent className="m-3">
+              {projects.map((proj: any, i: number) => (
+                <CarouselItem
+                  key={${proj['@_code']}-${i}}
+                  className="p-2"
+                  resource={#${proj['@_code']}}
+                  typeof="CreativeWork"
+                  property="itemListElement"
+                >
+                  <Card className="h-full bg-white/80 hover:bg-white transition">
+                    <CardContent className="space-y-1 py-4">
+                      <h3 property="name" className="font-medium">
+                        {proj.name[0]}
+                      </h3>
+                      <p className="text-xs text-gray-500" property="dateCreated">
+                        {proj.period[0]} · {proj.tools}
+                      </p>
+                      <p property="description" className="text-sm text-gray-700">
+                        {proj.desc[0]}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselNext />
+          </Carousel>
+        </section>
+
+        {/* Vidéo */}
+        {videoUrl && (
+          <section resource="#video1" typeof="VideoObject" property="hasPart">
+            <h2 className="text-2xl font-semibold mb-3" property="name">
+              {video?.title?.[0] || 'Présentation vidéo'}
+            </h2>
+            <div className="aspect-video w-full max-w-3xl mx-auto">
+              <iframe
+                src={videoUrl}
+                title="Présentation vidéo"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full rounded-lg shadow-lg"
+                property="embedUrl"
+              />
+            </div>
+          </section>
+        )}
+      </main>
   );
 }
 
