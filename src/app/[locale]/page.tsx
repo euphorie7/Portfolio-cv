@@ -222,13 +222,12 @@ export default async function Page(props: {
 
             <div className=" w-full max-w-3xl mx-auto">
               <iframe
-                src={videoUrl}
-                title="Présentation vidéo"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full rounded-lg shadow-lg"
-                property="embedUrl"
-              />
+  src={videoUrl}
+  title="Vidéo"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+  className="w-full h-full rounded-lg shadow-lg"
+/>
             </div>
           </section>
         )}
