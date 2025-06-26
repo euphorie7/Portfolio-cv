@@ -10,7 +10,7 @@ import {
   CarouselNext,
 }                               from '@/components/ui/carousel';
 
-export default async function function Page(props: {
+export default async function Page(props: {
   params: Promise<{ locale: string }>;
 }) {
   /* ───────── Chargement du XML ───────── */
