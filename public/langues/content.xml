@@ -1,299 +1,174 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<portfolio>
+// app/[locale]/page.tsx
+import { getContent } from '@/lib/loadContent';
+import Image from 'next/image';
+import {
+  Card,
+  CardContent,
+} from '@/components/ui/card';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from '@/components/ui/carousel';
 
-  <!-- ======== FRANÇAIS ======== -->
-  <lang code="fr">
-  <div id="video">
-                <object type="text/html"
-                    data="https://www.youtube.com/embed/erLbbextvlY?cc_lang_pref=fr&amp;cc_load_policy=1" width="800"
-                    height="600">
-                    <a href="https://www.youtube.com/embed/erLbbextvlY?cc_lang_pref=fr&amp;cc_load_policy=1">Video</a>
-                </object>
-            </div>
-    <!-- Sidebar -->
-    <profile>
-      <photo src="/hamza.jpg" alt="Photo de Hamza Laouni"/>
-<name>Hamza Laouni</name>
+export default async function Page(props: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await props.params;
+  const p = await getContent(locale);
 
-      <age>23</age>
-      <location>Île-de-France</location>
-      <email>laounihamza555@gmail.com</email>
-      <phone>+33 6 02 54 22 54</phone>
-    <linkedin url="https://www.linkedin.com/in/laouni-hamza-869318262/"> LAOUNI Hamza</linkedin>
-  <github url="https://github.com/euphorie7">LAOUNI Hamza</github>
-      <interests>
-        <item>Guitare électrique</item>
-        <item>Photographie</item>
-      </interests>
-     <languages>
-  <lang name="Français" level="Courant"/>
-  <lang name="Anglais" level="Avancé"/>
-  <lang name="Arabe" level="Courant"/>
-</languages>
-    </profile>
+  const profil   = p.profile[0];
+  const skills   = p.skills[0].category;
+  const projects = p.projects[0].project;
+  const education= p.education[0].item;
+  const videoUrl = p.video?.[0]?.url?.[0];
 
-    <!-- À propos -->
-    <about>
-      Ingénieur informatique passionné par la théorie informatique et le développement full-stack
-      (Next.js / NestJS). Deux ans d’expérience DevOps chez Valeo (systèmes moteurs, Cergy).
-    </about>
+  /* ───────────────────────────────────────────────────────── */
 
-    <!-- Compétences  -->
-    <skills>
-      <category name="Langages">
-        <skill>Python</skill><skill>Java</skill><skill>C</skill><skill>Shell</skill><skill>MATLAB</skill>
-      </category>
-      <category name="Technologies web">
-        <skill>JavaScript</skill><skill>Node.js</skill><skill>HTML/CSS</skill><skill>jQuery</skill><skill>PHP</skill>
-      </category>
-      <category name="Bases de données">
-        <skill>SQL</skill><skill>MySQL</skill>
-      </category>
-      <category name="Analyse réseau">
-        <skill>Tcpdump</skill><skill>Nmap</skill><skill>Wireshark</skill>
-      </category>
-      <category name="Outils">
-        <skill>VS Code</skill><skill>Git/GitHub</skill><skill>Eclipse</skill><skill>WampServer</skill><skill>Oracle</skill>
-      </category>
-      <category name="Autres">
-        <skill>JSON</skill><skill>XML</skill><skill>UML</skill>
-        <skill>Excel &amp; TCD</skill><skill>API REST</skill>
-      </category>
-    </skills>
+  return (
+    <div
+      className="flex flex-col lg:flex-row gap-0"
+      vocab="https://schema.org/"
+      typeof="Person"
+    >
+      {/* ============ SIDEBAR ============ */}
+      <aside
+        resource="#sidebar"
+        typeof="WebPageElement"
+        className="fixed left-0 top-0 h-screen w-80 bg-gradient-to-b from-gray-100 to-gray-200 px-6 py-8 shadow-lg overflow-y-auto space-y-6 z-20"
+      >
+        {/* Photo */}
+        <div className="flex justify-center mb-4" property="image" typeof="ImageObject">
+          <div className="relative w-40 h-40 overflow-hidden rounded-full ring-4 ring-gray-300 hover:scale-105 transition">
+            {profil.photo?.[0]?.$?.src && (
+              <Image
+                src={profil.photo[0].$.src}
+                alt={profil.photo[0].$.alt || 'photo'}
+                fill
+                className="object-cover"
+                property="contentUrl"
+              />
+            )}
+          </div>
+        </div>
 
-    <!-- Formation  -->
-    <education>
-      <item><label>Cycle ingénieur Informatique – Sup Galilée</label><year>2022-2026</year><place>USPN, Villetaneuse</place></item>
-      <item><label>Prépa MPSI-MP – Lycée Moulay Hassan</label><year>2020-2022</year><place>Tanger, Maroc</place></item>
-      <item><label>Bac Sc. Math B – Lycée Technique Moulay Youssef</label><year>2020</year><place>Tanger, Maroc (mention TB)</place></item>
-    </education>
+        {/* Nom + âge + localisation (reste sous Person) */}
+        <div className="text-center space-y-1">
+          <h1 className="text-2xl font-bold" property="name">
+            {profil.name[0]}
+          </h1>
+          <p className="text-sm text-gray-700">
+            <span property="birthDate">{profil.age[0]}</span> ans&nbsp;•&nbsp;
+            <span property="address">{profil.location[0]}</span>
+          </p>
+        </div>
 
-    <!-- Projets -->
-    <projects>
-      <project code="p4" tools="C">
-        <name>Puissance 4 IA</name>
-        <period>Déc 2023 – Jan 2024</period>
-        <school>Sup Galilée</school>
-        <desc>IA Minimax + multithreading optimisée pour un jeu Puissance 4.</desc>
-      </project>
+        {/* ContactPoint = uniquement contact */}
+        <div
+          typeof="ContactPoint"
+          property="contactPoint"
+          className="text-center space-y-0.5 mt-2"
+        >
+          <a
+            href={`mailto:${profil.email[0]}`}
+            className="block underline hover:text-blue-600"
+            property="email"
+          >
+            {profil.email[0]}
+          </a>
 
-      <project code="phoenix" tools="C, Python, Tkinter">
-        <name>Phoenix – messagerie desktop</name>
-        <period>Avr – Mai 2024</period>
-        <school>Sup Galilée</school>
-        <desc>Frontend Python /Tkinter &amp; backend C (sockets + pipes) pour communication asynchrone.</desc>
-      </project>
+          {/* retire les espaces pour href, conserve lisible à l’écran */}
+          <a
+            href={`tel:${profil.phone[0].replace(/\s+/g, '')}`}
+            className="block underline hover:text-blue-600"
+            property="telephone"
+          >
+            {profil.phone[0]}
+          </a>
 
-      <project code="life" tools="Java, JavaFX">
-        <name>Jeu de la Vie</name>
-        <period>Mai – Juin 2024</period>
-        <school>Sup Galilée</school>
-        <desc>Simulation d’automates cellulaires avec interface JavaFX modulaire.</desc>
-      </project>
+          <a
+            href={profil.linkedin[0].$.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block text-gray-600 underline"
+            property="sameAs"
+          >
+            LinkedIn
+          </a>
 
-      <project code="trains" tools="JS, HTML, CSS">
-        <name>Petit Trains – simulateur ferroviaire</name>
-        <period>Juin 2024</period>
-        <school>Sup Galilée</school>
-        <desc>Canvas pour animer trains &amp; rails, assets personnalisés, JS pur.</desc>
-      </project>
-    </projects>
-    <video>
-<url>https://www.youtube.com/watch?v=aircAruvnKk&amp;t=514s</url>
+          <a
+            href={profil.github[0].$.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block text-gray-600 underline"
+            property="sameAs"
+          >
+            GitHub
+          </a>
+        </div>
 
-  <title>Deep Learning</title>
-</video>
-  </lang>
+        {/* Intérêts */}
+        <section typeof="ItemList" property="knowsAbout">
+          <h2 className="font-semibold">Intérêts</h2>
+          <ul className="list-disc list-inside text-sm">
+            {profil.interests[0].item.map((it: string, i: number) => (
+              <li key={`${it}-${i}`} property="itemListElement">
+                {it}
+              </li>
+            ))}
+          </ul>
+        </section>
 
-  <!-- ======== ENGLISH (à compléter) ======== -->
-<lang code="en">
-  <!-- Sidebar  -->
-  <profile>
-    <photo src="/hamza.jpg" alt="Hamza Laouni's photo"/>
-    <name>Hamza Laouni</name>
-    <age>22</age>
-    <location>Île-de-France</location>
-    <email>laounihamza555@gmail.com</email>
-    <phone>+33 6 02 54 22 54</phone>
-    <linkedin url="https://www.linkedin.com/in/laouni-hamza-869318262/"> LAOUNI Hamza</linkedin>
-  <github url="https://github.com/euphorie7">LAOUNI Hamza</github>
-    <interests>
-      <item>Electric guitar</item>
-      <item>Photography</item>
-    </interests>
-    <languages>
-      <lang name="French" level="Fluent"/>
-      <lang name="English" level="Advanced"/>
-      <lang name="Arabic" level="Fluent"/>
-    </languages>
-  </profile>
+        {/* Langues : un seul typeof (ItemList) */}
+        <section typeof="ItemList" property="knowsLanguage">
+          <h2 className="font-semibold">Langues</h2>
+          <ul className="text-sm space-y-0.5">
+            {profil.languages[0].lang.map((l: any, i: number) => (
+              <li
+                key={`${l.$.name}-${i}`}
+                className="flex items-center gap-1"
+                property="itemListElement"
+                typeof="Language"
+              >
+                <span className="font-medium" property="name">
+                  {l.$.name}
+                </span>
+                <span className="text-xs text-gray-600">
+                  ({l.$.level})
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-  <!-- About -->
-  <about>
-    Computer engineering student passionate about theoretical CS and full-stack development (Next.js / NestJS). Two years of DevOps experience at Valeo (Powertrain Systems, Cergy).
-  </about>
+        {/* Compétences */}
+        <section typeof="ItemList" property="hasSkill">
+          <h2 className="font-semibold">Compétences</h2>
+          <ul className="text-sm space-y-2">
+            {skills.map((cat: any, i: number) => (
+              <li
+                key={`${cat['@_name']}-${i}`}
+                className="bg-white hover:bg-gray-50 transition p-3 rounded-lg shadow-sm"
+                property="itemListElement"
+                typeof="DefinedTerm"
+              >
+                <span className="font-medium block text-gray-800" property="name">
+                  {cat['@_name']}
+                </span>
+                <span className="text-xs text-gray-600" property="description">
+                  {cat.skill.join(', ')}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </aside>
 
-  <!-- Skills -->
-  <skills>
-    <category name="Languages">
-      <skill>Python</skill><skill>Java</skill><skill>C</skill><skill>Shell</skill><skill>MATLAB</skill>
-    </category>
-    <category name="Web technologies">
-      <skill>JavaScript</skill><skill>Node.js</skill><skill>HTML/CSS</skill><skill>jQuery</skill><skill>PHP</skill>
-    </category>
-    <category name="Databases">
-      <skill>SQL</skill><skill>MySQL</skill>
-    </category>
-    <category name="Network analysis">
-      <skill>Tcpdump</skill><skill>Nmap</skill><skill>Wireshark</skill>
-    </category>
-    <category name="Tools">
-      <skill>VS Code</skill><skill>Git/GitHub</skill><skill>Eclipse</skill><skill>WampServer</skill><skill>Oracle</skill>
-    </category>
-    <category name="Other">
-      <skill>JSON</skill><skill>XML</skill><skill>UML</skill>
-      <skill>Excel &amp; Pivot Tables</skill><skill>REST API</skill>
-    </category>
-  </skills>
-
-  <!-- Education-->
-  <education>
-    <item><label>Engineering degree in Computer Science – Sup Galilée</label><year>2022–2026</year><place>USPN, Villetaneuse, France</place></item>
-    <item><label>Prep class MPSI-MP – Lycée Moulay Hassan</label><year>2020–2022</year><place>Tanger, Morocco</place></item>
-    <item><label>Mathematics Baccalaureate – Lycée Technique Moulay Youssef</label><year>2020</year><place>Tanger, Morocco (Honors)</place></item>
-  </education>
-
-  <!-- Projects  -->
-  <projects>
-    <project code="p4" tools="C">
-      <name>Connect Four AI</name>
-      <period>Dec 2023 – Jan 2024</period>
-      <school>Sup Galilée</school>
-      <desc>Minimax-based AI with multithreading for optimized Connect Four gameplay.</desc>
-    </project>
-
-    <project code="phoenix" tools="C, Python, Tkinter">
-      <name>Phoenix – Desktop Messaging App</name>
-      <period>Apr – May 2024</period>
-      <school>Sup Galilée</school>
-      <desc>Python/Tkinter frontend and C backend using sockets and pipes for async communication.</desc>
-    </project>
-
-    <project code="life" tools="Java, JavaFX">
-      <name>Game of Life</name>
-      <period>May – Jun 2024</period>
-      <school>Sup Galilée</school>
-      <desc>Cellular automata simulation with modular JavaFX interface.</desc>
-    </project>
-
-    <project code="trains" tools="JS, HTML, CSS">
-      <name>Little Trains – Railway Simulator</name>
-      <period>Jun 2024</period>
-      <school>Sup Galilée</school>
-      <desc>Train simulation with Canvas and custom images for visuals.</desc>
-    </project>
-  </projects>
-  <video>
-<url>https://www.youtube.com/watch?v=aircAruvnKk&amp;t=514s</url>
-
-  <title>Présentation du portfolio</title>
-</video>
-</lang>
-
-<lang code="ar">
-  <!-- الشريط الجانبي -->
-  <profile>
-    <photo src="/hamza.jpg" alt="صورة حمزة العوني"/>
-    <name>حمزة العوني</name>
-    <age>22</age>
-    <location>إيل دو فرانس</location>
-    <email>laounihamza555@gmail.com</email>
-    <phone>+33 6 02 54 22 54</phone>
-    <linkedin url="https://www.linkedin.com/in/laouni-hamza-869318262/">حمزة العوني</linkedin>
-  <github url="https://github.com/euphorie7">حمزة العوني</github>
-    
-    <interests>
-      <item>الغيتار الكهربائي</item>
-      <item>التصوير الفوتوغرافي</item>
-    </interests>
-    <languages>
-      <lang name="الفرنسية" level="بطلاقة"/>
-      <lang name="الإنجليزية" level="متقدم"/>
-      <lang name="العربية" level="بطلاقة"/>
-    </languages>
-  </profile>
-
-  <!-- نبذة عني  -->
-  <about>
-    طالب في هندسة المعلومات، شغوف بالمجال النظري وبتطوير الويب الكامل (Next.js / NestJS). أملك خبرة سنتين في DevOps لدى Valeo (أنظمة القيادة، سيرجي).
-  </about>
-
-  <!-- المهارات -->
-  <skills>
-    <category name="لغات البرمجة">
-      <skill>Python</skill><skill>Java</skill><skill>C</skill><skill>Shell</skill><skill>MATLAB</skill>
-    </category>
-    <category name="تكنولوجيا الويب">
-      <skill>JavaScript</skill><skill>Node.js</skill><skill>HTML/CSS</skill><skill>jQuery</skill><skill>PHP</skill>
-    </category>
-    <category name="قواعد البيانات">
-      <skill>SQL</skill><skill>MySQL</skill>
-    </category>
-    <category name="تحليل حركة الشبكة">
-      <skill>Tcpdump</skill><skill>Nmap</skill><skill>Wireshark</skill>
-    </category>
-    <category name="الأدوات">
-      <skill>VS Code</skill><skill>Git/GitHub</skill><skill>Eclipse</skill><skill>WampServer</skill><skill>Oracle</skill>
-    </category>
-    <category name="أخرى">
-      <skill>JSON</skill><skill>XML</skill><skill>UML</skill>
-      <skill>Excel وجداول محورية</skill><skill>REST API</skill>
-    </category>
-  </skills>
-
-  <!-- التكوين  -->
-  <education>
-    <item><label>دراسة هندسة المعلومات – Sup Galilée</label><year>2022–2026</year><place>جامعة سوربون باريس نورد، فيليتانوز، فرنسا</place></item>
-    <item><label>الأقسام التحضيرية MPSI-MP – ثانوية مولاي الحسن</label><year>2020–2022</year><place>طنجة، المغرب</place></item>
-    <item><label>الباكالوريا علوم رياضية B – ثانوية تقنية مولاي يوسف</label><year>2020</year><place>طنجة، المغرب (ميزة: حسن جدًا)</place></item>
-  </education>
-
-  <!-- المشاريع  -->
-  <projects>
-    <project code="p4" tools="C">
-      <name>لعبة القوة 4 بالذكاء الاصطناعي</name>
-      <period>دجنبر 2023 – يناير 2024</period>
-      <school>Sup Galilée</school>
-      <desc>تطوير خوارزمية Minimax مع المعالجة المتوازية لتقديم خصم قوي للاعب البشري.</desc>
-    </project>
-
-    <project code="phoenix" tools="C, Python, Tkinter">
-      <name>Phoenix – تطبيق مراسلة سطح المكتب</name>
-      <period>أبريل – ماي 2024</period>
-      <school>Sup Galilée</school>
-      <desc>واجهة أمامية بـ Tkinter وخلفية بـ C باستخدام المقابس وpipes للتواصل غير المتزامن.</desc>
-    </project>
-
-    <project code="life" tools="Java, JavaFX">
-      <name>لعبة الحياة</name>
-      <period>ماي – يونيو 2024</period>
-      <school>Sup Galilée</school>
-      <desc>محاكاة الخلايا حسب قواعد Conway باستخدام JavaFX بواجهة رسومية مرنة.</desc>
-    </project>
-
-    <project code="trains" tools="JS, HTML, CSS">
-      <name>قطارات صغيرة – محاكي سكك حديدية</name>
-      <period>يونيو 2024</period>
-      <school>Sup Galilée</school>
-      <desc>تطوير محاكي تفاعلي للقطارات باستخدام Canvas وصور مخصصة لعرض العناصر.</desc>
-    </project>
-  </projects>
-  <video>
-<url>https://www.youtube.com/watch?v=aircAruvnKk&amp;t=514s</url>
-
-  <title>Présentation du portfolio</title>
-</video>
-</lang>
-
-</portfolio>
+      {/* ============ MAIN ============ */}
+      {/* … (le reste de ton composant ne change pas) … */}
+    </div>
+  );
+}
 
