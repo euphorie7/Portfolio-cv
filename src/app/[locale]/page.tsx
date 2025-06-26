@@ -13,8 +13,8 @@ import {
 export default async function Page(props: {
   params: Promise<{ locale: string }>;
 }) {
-  /* ───────── Chargement du XML ───────── */
-  const { locale } = params;
+ 
+  const { locale } = props.params;
   const p          = await getContent(locale);
 
   const profile   = p.profile[0];
