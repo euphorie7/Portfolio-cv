@@ -220,9 +220,9 @@ export default async function Page(props: {
               {video?.title?.[0] ?? 'Epilogue lala land'}
             </h2>
 
-            <div className="aspect-video w-full max-w-3xl mx-auto">
+            <div className=" w-full max-w-3xl mx-auto">
               <iframe
-                src="https://www.youtube.com/watch?v=HSg3tBzAVFk&list=RDHSg3tBzAVFk&start_radio=1"
+                src={videoUrl}
                 title="Présentation vidéo"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
